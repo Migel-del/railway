@@ -16,6 +16,9 @@ RUN chmod +x /entrypoint.sh
 # ===== 3. Python зависимости =====
 RUN pip install --no-cache-dir -r /app/requirements.txt \
     && apk del alpine-sdk libffi-dev
+    
+# ===== 3.1. Дополнительные Python зависимости =====
+RUN pip install --no-cache-dir google protobuf grpcio grpcio-tools grpclib
 
 # ===== 4. Скачиваем официальный Marznode =====
 RUN git clone --depth=1 https://github.com/marzneshin/marznode.git /tmp/marznode \
