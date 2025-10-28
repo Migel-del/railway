@@ -2,29 +2,29 @@ FROM python:3.12-alpine
 
 ENV PYTHONUNBUFFERED=1
 
-# ===== 1. Устанавливаем зависимости =====
+# ===== 1. Системные пакеты =====
 RUN apk add --no-cache bash curl unzip jq git ca-certificates alpine-sdk libffi-dev \
     && update-ca-certificates
 
 WORKDIR /app
 
-# ===== 2. Копируем только локальные вспомогательные файлы =====
+# ===== 2. Локальные файлы =====
 COPY entrypoint.sh /entrypoint.sh
 COPY requirements.txt /app/requirements.txt
 RUN chmod +x /entrypoint.sh
 
-# ===== 3. Устанавливаем Python-зависимости (если есть) =====
+# ===== 3. Python зависимости =====
 RUN pip install --no-cache-dir -r /app/requirements.txt \
     && apk del alpine-sdk libffi-dev
 
-# ===== 4. Скачиваем оригинальный Marzneshin Node =====
+# ===== 4. Скачиваем официальный Marznode =====
 RUN git clone --depth=1 https://github.com/marzneshin/marznode.git /tmp/marznode \
     && cp -r /tmp/marznode/marznode /app/marznode \
     && cp /tmp/marznode/marznode.py /app/marznode.py \
     && cp /tmp/marznode/xray_config.json /app/xray_config.json || true \
     && rm -rf /tmp/marznode
 
-# ===== 5. Устанавливаем Xray-core (v25.8.3) =====
+# ===== 5. Ставим Xray-core версии 25.8.3 =====
 ARG XRAY_VERSION=25.8.3
 ARG XRAY_ARCH=64
 RUN curl -fsSL -o /tmp/xray.zip https://github.com/XTLS/Xray-core/releases/download/v${XRAY_VERSION}/Xray-linux-${XRAY_ARCH}.zip \
@@ -43,7 +43,9 @@ ENV SERVICE_PORT=5566 \
     SSL_CLIENT_CERT_FILE=/app/client.pem \
     SSL_KEY_FILE=/app/server.key \
     SSL_CERT_FILE=/app/server.cert \
-    CLIENT_PEM_B64=""
+    CLIENT_PEM_B64="" \
+    SERVER_KEY_B64="" \
+    SERVER_CERT_B64=""
 
 EXPOSE 5566
 ENTRYPOINT ["/entrypoint.sh"]
