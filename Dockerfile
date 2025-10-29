@@ -10,16 +10,22 @@ WORKDIR /app
 
 # ===== 2. Локальные файлы =====
 COPY entrypoint.sh /entrypoint.sh
-COPY requirements.txt /app/requirements.txt
 COPY xray_config.json /app/xray_config.json
 RUN chmod +x /entrypoint.sh
 
-# ===== 3. Python зависимости =====
-RUN pip install --no-cache-dir -r /app/requirements.txt \
+# ===== 3. Устанавливаем Python-зависимости =====
+RUN pip install --no-cache-dir \
+    aiohttp \
+    grpclib>=0.4.7 \
+    cryptography>=43.0.0 \
+    python-decouple>=3.8 \
+    python-dotenv>=1.0.1 \
+    pydantic>=1.10.15 \
+    protobuf>=4.25.3 \
+    google \
+    grpcio \
+    grpcio-tools \
     && apk del alpine-sdk libffi-dev
-    
-# ===== 3.1. Дополнительные Python зависимости =====
-RUN pip install --no-cache-dir google protobuf grpcio grpcio-tools grpclib
 
 # ===== 4. Скачиваем официальный Marznode =====
 RUN git clone --depth=1 https://github.com/marzneshin/marznode.git /tmp/marznode \
