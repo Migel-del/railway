@@ -1,7 +1,10 @@
 {
   "log": {
-    "loglevel": "info"
+    "loglevel": "info",
+    "access": "/app/xray.log",
+    "error": "/app/xray_error.log"
   },
+
   "dns": {
     "servers": [
       {
@@ -15,53 +18,23 @@
     "disableFallback": true,
     "disableFallbackIfMatch": true
   },
+
   "routing": {
     "domainStrategy": "AsIs",
     "rules": [
       {
         "type": "field",
-        "ip": [
-          "geoip:private"
-        ],
+        "ip": ["geoip:private"],
         "outboundTag": "block"
       },
       {
         "type": "field",
-        "ip": [
-          "95.85.96.0/19",
-          "95.85.96.0/24",
-          "95.85.98.0/24",
-          "95.85.99.0/24",
-          "95.85.100.0/22",
-          "95.85.100.0/24",
-          "95.85.101.0/24",
-          "95.85.104.0/22",
-          "95.85.104.0/24",
-          "95.85.121.0/24",
-          "103.220.0.0/22",
-          "119.235.112.0/20",
-          "177.93.143.0/24",
-          "185.69.184.0/24",
-          "216.250.8.0/21",
-          "217.174.224.0/20",
-          "93.171.220.0/22",
-          "93.171.220.0/24",
-          "93.171.221.0/24",
-          "93.171.222.0/24",
-          "93.171.223.0/24",
-          "185.69.185.0/24"
-        ],
-        "outboundTag": "block"
-      },
-      {
-        "type": "field",
-        "protocol": [
-          "bittorrent"
-        ],
+        "protocol": ["bittorrent"],
         "outboundTag": "block"
       }
     ]
   },
+
   "inbounds": [
     {
       "tag": "vless-ru-ws",
@@ -76,10 +49,11 @@
         "network": "ws",
         "security": "tls",
         "tlsSettings": {
+          "serverName": "video.up.railway.app",
           "certificates": [
             {
-              "certificateFile": "/app/server.cert",
-              "keyFile": "/app/server.key"
+              "certificateFile": "/app/certs/server.cert",
+              "keyFile": "/app/certs/server.key"
             }
           ]
         },
@@ -88,15 +62,42 @@
         },
         "sniffing": {
           "enabled": true,
-          "destOverride": [
-            "http",
-            "tls",
-            "quic"
+          "destOverride": ["http", "tls", "quic"]
+        }
+      }
+    },
+    {
+      "tag": "vless-usa-ws",
+      "listen": "0.0.0.0",
+      "port": 2099,
+      "protocol": "vless",
+      "settings": {
+        "clients": [],
+        "decryption": "none"
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "video.up.railway.app",
+          "certificates": [
+            {
+              "certificateFile": "/app/certs/server.cert",
+              "keyFile": "/app/certs/server.key"
+            }
           ]
+        },
+        "wsSettings": {
+          "path": "/usa"
+        },
+        "sniffing": {
+          "enabled": true,
+          "destOverride": ["http", "tls", "quic"]
         }
       }
     }
   ],
+
   "outbounds": [
     {
       "protocol": "freedom",
@@ -104,8 +105,7 @@
     },
     {
       "protocol": "freedom",
-      "tag": "dns-out",
-      "settings": {}
+      "tag": "dns-out"
     },
     {
       "protocol": "blackhole",
