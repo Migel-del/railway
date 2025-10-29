@@ -29,6 +29,7 @@ RUN pip install --no-cache-dir \
     commentjson \
     PyYAML \
     xxhash \
+    anyio \
     && apk del alpine-sdk libffi-dev
 
 # ===== 4. Скачиваем официальный Marznode =====
