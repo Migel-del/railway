@@ -11,6 +11,7 @@ WORKDIR /app
 # ===== 2. Локальные файлы =====
 COPY entrypoint.sh /entrypoint.sh
 COPY requirements.txt /app/requirements.txt
+COPY xray_config.json /app/xray_config.json
 RUN chmod +x /entrypoint.sh
 
 # ===== 3. Python зависимости =====
@@ -24,7 +25,6 @@ RUN pip install --no-cache-dir google protobuf grpcio grpcio-tools grpclib
 RUN git clone --depth=1 https://github.com/marzneshin/marznode.git /tmp/marznode \
     && cp -r /tmp/marznode/marznode /app/marznode \
     && cp /tmp/marznode/marznode.py /app/marznode.py \
-    && cp /tmp/marznode/xray_config.json /app/xray_config.json || true \
     && rm -rf /tmp/marznode
 
 # ===== 5. Ставим Xray-core версии 25.8.3 =====
