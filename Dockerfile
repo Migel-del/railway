@@ -11,6 +11,8 @@ WORKDIR /app
 # ===== 2. Локальные файлы =====
 COPY entrypoint.sh /entrypoint.sh
 COPY xray_config.json /app/xray_config.json
+COPY server.cert /app/certs/server.cert
+COPY server.key /app/certs/server.key
 RUN chmod +x /entrypoint.sh
 
 # ===== 3. Устанавливаем Python-зависимости =====
