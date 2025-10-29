@@ -25,6 +25,10 @@ RUN pip install --no-cache-dir \
     google \
     grpcio \
     grpcio-tools \
+    requests \
+    commentjson \
+    PyYAML \
+    xxhash \
     && apk del alpine-sdk libffi-dev
 
 # ===== 4. Скачиваем официальный Marznode =====
