@@ -16,20 +16,21 @@ RUN chmod +x /entrypoint.sh
 # ===== 3. Устанавливаем Python-зависимости =====
 RUN pip install --no-cache-dir \
     aiohttp \
-    grpclib>=0.4.7 \
-    cryptography>=43.0.0 \
+    anyio \
+    commentjson \
     python-decouple>=3.8 \
     python-dotenv>=1.0.1 \
-    pydantic>=1.10.15 \
-    protobuf>=4.25.3 \
+    grpclib>=0.4.7 \
     google \
     grpcio \
     grpcio-tools \
+    pydantic>=1.10.15 \
     requests \
-    commentjson \
+    cryptography>=43.0.0 \
     PyYAML \
     xxhash \
-    anyio \
+    protobuf>=4.25.3 \
+    pyOpenSSL \
     && apk del alpine-sdk libffi-dev
 
 # ===== 4. Скачиваем официальный Marznode =====
